@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.14)
 
 project(agui)
 
@@ -148,6 +148,7 @@ if(WANT_SHARED)
 else()
   add_library(agui STATIC ${AGUI_SOURCES})
   target_include_directories(agui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  include_directories(agui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
   
   if(MACOSX)
   target_link_libraries (agui ${COCOA_LIBRARY} )
