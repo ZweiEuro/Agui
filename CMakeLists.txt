@@ -9,26 +9,26 @@ OPTION(WANT_ALLEGRO5_BACKEND "Build the Allegro 5 backend" ON)
 OPTION(WANT_SFML2_BACKEND "Build the SFML2 backend" OFF) 
 
 if(APPLE AND NOT IPHONE)
-    set(MACOSX 1)
+  set(MACOSX 1)
 endif(APPLE AND NOT IPHONE)
 
 if(MACOSX)
-ADD_DEFINITIONS("-x objective-c++")
+	ADD_DEFINITIONS("-x objective-c++")
 endif(MACOSX)
 
 if(MACOSX)
-set(CMAKE_EXE_LINKER_FLAGS "-framework Cocoa")
-find_library(COCOA_LIBRARY Cocoa)
+	set(CMAKE_EXE_LINKER_FLAGS "-framework Cocoa")
+	find_library(COCOA_LIBRARY Cocoa)
 endif(MACOSX)
 
 set(CLIPBOARD_SOURCE)
 
 if(WIN32)
-set(CLIPBOARD_SOURCE src/Agui/Clipboard/WinClipboard.cpp)
+	set(CLIPBOARD_SOURCE src/Agui/Clipboard/WinClipboard.cpp)
 endif(WIN32)
 
 if(MACOSX)
-set(CLIPBOARD_SOURCE src/Agui/Clipboard/OSXClipboard.mm)
+	set(CLIPBOARD_SOURCE src/Agui/Clipboard/OSXClipboard.mm)
 endif(MACOSX)
 
 
@@ -126,40 +126,39 @@ set(SFML2_BACKEND_SOURCES
 if(WANT_SHARED)
   add_library(agui SHARED ${AGUI_SOURCES})
   target_include_directories(agui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-  
-   if(MACOSX)
-  target_link_libraries (agui ${COCOA_LIBRARY} )
+
+  if(MACOSX)
+  	target_link_libraries (agui ${COCOA_LIBRARY} )
   endif(MACOSX)
   
   set_target_properties(agui PROPERTIES DEFINE_SYMBOL "AGUI_BUILD")
   
   if(WANT_ALLEGRO5_BACKEND)
     add_library(agui_allegro5 SHARED ${ALLEGRO5_BACKEND_SOURCES})
-  set_target_properties(agui_allegro5 PROPERTIES DEFINE_SYMBOL "AGUI_BACKEND_BUILD")
-  target_link_libraries (agui_allegro5 agui)
+  	set_target_properties(agui_allegro5 PROPERTIES DEFINE_SYMBOL "AGUI_BACKEND_BUILD")
+  	target_link_libraries (agui_allegro5 agui)
   endif()
   
-    if(WANT_SFML2_BACKEND)
+  if(WANT_SFML2_BACKEND)
     add_library(agui_sfml2 SHARED ${SFML2_BACKEND_SOURCES})
-  set_target_properties(agui_sfml2 PROPERTIES DEFINE_SYMBOL "AGUI_BACKEND_BUILD")
-  target_link_libraries (agui_sfml2 agui)
+  	set_target_properties(agui_sfml2 PROPERTIES DEFINE_SYMBOL "AGUI_BACKEND_BUILD")
+  	target_link_libraries (agui_sfml2 agui)
   endif()
   
 else()
   add_library(agui STATIC ${AGUI_SOURCES})
   target_include_directories(agui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
   include_directories(agui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-  
   if(MACOSX)
-  target_link_libraries (agui ${COCOA_LIBRARY} )
+  	target_link_libraries (agui ${COCOA_LIBRARY} )
   endif(MACOSX)
   
-    if(WANT_ALLEGRO5_BACKEND)
+  if(WANT_ALLEGRO5_BACKEND)
     add_library(agui_allegro5 STATIC ${ALLEGRO5_BACKEND_SOURCES})
     set_target_properties(agui_allegro5 PROPERTIES COMPILE_DEFINITIONS "ALLEGRO_STATICLINK")
   endif()
   
-    if(WANT_SFML2_BACKEND)
+  if(WANT_SFML2_BACKEND)
     add_library(agui_sfml2 STATIC ${SFML2_BACKEND_SOURCES})
     set_target_properties(agui_sfml2 PROPERTIES COMPILE_DEFINITIONS "SFML_STATIC")
   endif()
